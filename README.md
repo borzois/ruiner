@@ -12,7 +12,7 @@ pip install Pillow argparse
 
 ## Usage
 ```
-main.py [-h] [-i ITERATIONS] [-r RESIZE] [--gif | --no-gif] [-p PROCEDURE] filename
+ruiner.py [-h] [-i ITERATIONS] [-r RESIZE] [--gif | --no-gif] [-p PROCEDURE] filename
 ```
 
 ## Procedure
@@ -51,7 +51,7 @@ The `-r` argument describes the resize factor on the *final* iteration,
 but the actual factor gradually decreases from 100% during the execution.
 
 ### Examples
-`.\main.py -i 400 -r 15 -p "rNEAREST YCbCr RGB RLANCZOS" --gif .\image.jpg`
+`ruiner.py -i 400 -r 15 -p "rNEAREST YCbCr RGB RLANCZOS" --gif ./image.jpg`
 
 The image is:
 - loaded
