@@ -12,7 +12,7 @@ pip install Pillow argparse
 
 ## Usage
 ```
-ruiner.py [-h] [-i ITERATIONS] [-r RESIZE] [--gif | --no-gif] [-p PROCEDURE] filename
+ruiner.py [-h] [-i ITERATIONS] [-r RESIZE] [-s SPEED] [--gif | --no-gif] [-p PROCEDURE] filename
 ```
 
 ## Procedure

@@ -25,6 +25,7 @@ class Ruiner:
         self._args = args
         prepare_directory()
         self._images = []
+        self._image_path = os.path.abspath(self._args.filename)
         self._images.append(self.prepare_image())
         self._image_size = self._images[0].size
         self._filters = {
@@ -37,19 +38,22 @@ class Ruiner:
         }
 
     def prepare_image(self):
-        with Image.open(self._args.filename) as im:
+        with Image.open(self._image_path) as im:
             im = im.convert("RGB")
             im.save("tmp/compressed0.jpg", "JPEG")
             return im
 
     def export_image(self):
-        self._images[-1].save(self._args.filename.split('.')[0] + "_" + self._args.procedure + "_RUINED.jpg", "JPEG")
+        self._images[-1].save(os.path.splitext(self._image_path)[0] + "_" + self._args.procedure + "_RUINED.jpg", "JPEG")
 
-    # TODO: add gif speed option
     def export_gif(self):
         print("generating gif")
-        gif_filename = self._args.filename.split('.')[0] + "_" + self._args.procedure + "_DECAY.gif"
-        self._images[0].save(gif_filename, save_all=True, append_images=[self._images[i] for i in range(1, len(self._images)) if i % 4 == 0], optimize=True)
+        gif_filename = os.path.splitext(self._image_path)[0] + "_" + self._args.procedure + "_DECAY.gif"
+        gif_speed = self._args.speed
+        self._images[0].save(gif_filename,
+                             save_all=True,
+                             append_images=[self._images[i] for i in range(1, len(self._images)) if i % gif_speed == 0],
+                             optimize=True)
         print("done")
 
     def ruin(self):
@@ -95,8 +99,8 @@ def get_args():
     parser = argparse.ArgumentParser(description="image destruction toolkit")
     parser.add_argument("-i", "--iterations", type=int, help="Number of times to compress")
     parser.add_argument("-r", "--resize", type=int, help="Percentage to resize to")
-    parser.add_argument("--gif", action=argparse.BooleanOptionalAction,
-                        help="Generates a gif")
+    parser.add_argument("-s", "--speed", type=int, default=1, help="GIF speed multiplier (only use every s-th frame)")
+    parser.add_argument("--gif", action=argparse.BooleanOptionalAction, default=False, help="Generates a gif")
     parser.add_argument("-p", "--procedure", type=str, help="Procedure (see readme)")
     parser.add_argument("filename", type=str, help="Input Filename")
 
