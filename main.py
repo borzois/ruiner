@@ -14,6 +14,7 @@ def interpolated_dip(iteration, total_iterations, dip_percentage):
     return p * dip_percentage + (1 - p) * 100
 
 
+# TODO: clean up after execution
 def prepare_directory():
     if not os.path.exists("tmp/"):
         os.makedirs("tmp/")
@@ -61,10 +62,10 @@ class Ruiner:
                 print("current image: " + outfile + "; current resize: " + str(int(current_dip)) + "%; ", end='')
 
                 for operation in proc:
-                    if operation == 'YCbCr':
+                    if operation == 'cYCbCr':
                         print("convert to YCbCr; ", end='')
                         im = im.convert("YCbCr")
-                    elif operation == 'RGB':
+                    elif operation == 'cRGB':
                         print("convert to RGB; ", end='')
                         im = im.convert("RGB")
                     elif operation.startswith('r'):
