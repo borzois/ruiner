@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 
 import PIL.Image
 from PIL import Image
@@ -14,11 +15,14 @@ def interpolated_dip(iteration, total_iterations, dip_percentage):
     return p * dip_percentage + (1 - p) * 100
 
 
-# TODO: clean up after execution
 def prepare_directory():
     if not os.path.exists("tmp/"):
         os.makedirs("tmp/")
 
+
+def remove_directory(directory):
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
 
 class Ruiner:
     def __init__(self, args):
@@ -39,12 +43,15 @@ class Ruiner:
 
     def prepare_image(self):
         with Image.open(self._image_path) as im:
+            print("loaded " + self._image_path)
             im = im.convert("RGB")
             im.save("tmp/compressed0.jpg", "JPEG")
             return im
 
     def export_image(self):
-        self._images[-1].save(os.path.splitext(self._image_path)[0] + "_" + self._args.procedure + "_RUINED.jpg", "JPEG")
+        image_filename = os.path.splitext(self._image_path)[0] + "_" + self._args.procedure + "_RUINED.jpg"
+        self._images[-1].save(image_filename, "JPEG")
+        print("image exported at " + image_filename)
 
     def export_gif(self):
         print("generating gif")
@@ -54,6 +61,11 @@ class Ruiner:
                              save_all=True,
                              append_images=[self._images[i] for i in range(1, len(self._images)) if i % gif_speed == 0],
                              optimize=True)
+        print("gif exported at " + gif_filename)
+
+    def cleanup(self):
+        print("cleaning up")
+        remove_directory("tmp/")
         print("done")
 
     def ruin(self):
@@ -92,6 +104,8 @@ class Ruiner:
         self.export_image()
         if self._args.gif:
             self.export_gif()
+        if not self._args.keep_temp:
+            self.cleanup()
         return self._images[-1]
 
 
@@ -101,6 +115,7 @@ def get_args():
     parser.add_argument("-r", "--resize", type=int, help="Percentage to resize to")
     parser.add_argument("-s", "--speed", type=int, default=1, help="GIF speed multiplier (only use every s-th frame)")
     parser.add_argument("--gif", action=argparse.BooleanOptionalAction, default=False, help="Generates a gif")
+    parser.add_argument("--keep-temp", action=argparse.BooleanOptionalAction, default=False, help="Keeps temp files")
     parser.add_argument("-p", "--procedure", type=str, help="Procedure (see readme)")
     parser.add_argument("filename", type=str, help="Input Filename")
 
