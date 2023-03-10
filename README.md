@@ -1,5 +1,6 @@
 # Ruiner
 #### A JPEG compression based image destruction toolkit
+![](example.gif)
 
 ## Dependencies
 - python >= 3.9

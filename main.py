@@ -45,10 +45,11 @@ class Ruiner:
     def export_image(self):
         self._images[-1].save(self._args.filename.split('.')[0] + "_" + self._args.procedure + "_RUINED.jpg", "JPEG")
 
+    # TODO: add gif speed option
     def export_gif(self):
         print("generating gif")
         gif_filename = self._args.filename.split('.')[0] + "_" + self._args.procedure + "_DECAY.gif"
-        self._images[0].save(gif_filename, save_all=True, append_images=self._images[1:], optimize=True)
+        self._images[0].save(gif_filename, save_all=True, append_images=[self._images[i] for i in range(1, len(self._images)) if i % 4 == 0], optimize=True)
         print("done")
 
     def ruin(self):
