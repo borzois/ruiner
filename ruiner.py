@@ -96,6 +96,10 @@ class Ruiner:
                         current_filter = self._filters[operation[1:]]
                         print("enlarge " + str(current_filter) + "; ", end='')
                         im = im.resize(self._image_size, resample=current_filter)
+                    elif operation.startswith('t'):
+                        angle = int(operation[1:])
+                        print("tilt " + str(angle) + "; ", end='')
+                        im = im.rotate(angle, expand=True)
 
                 self._images.append(im)
                 im.save(outfile, "JPEG")
