@@ -26,6 +26,7 @@ The procedure is described using a string of keywords, delimited using spaces
 r[FILTER] - resize (usually shrink) the image using the selected filter
 R[FILTER] - resize the image to its original size using the selected filter
 c[MODE] - convert the image to a different colorspace
+t[DEGREES] - tilt the image clockwise
 ```
 
 ##### Filters
