@@ -48,6 +48,12 @@ class Ruiner:
             im.save("tmp/compressed0.jpg", "JPEG")
             return im
 
+    def convert_to_RGB(self):
+        with Image.open(self._image_path) as im:
+            im = im.convert("RGB")
+            print("bad color mode, converting to RGB!")
+            return im
+
     def export_image(self):
         image_filename = os.path.splitext(self._image_path)[0] + "_" + self._args.procedure + "_RUINED.jpg"
         self._images[-1].save(image_filename, "JPEG")
@@ -82,9 +88,11 @@ class Ruiner:
                     if operation == 'cYCbCr':
                         print("convert to YCbCr; ", end='')
                         im = im.convert("YCbCr")
+                        band = "YCbCr"
                     elif operation == 'cRGB':
                         print("convert to RGB; ", end='')
                         im = im.convert("RGB")
+                        band = "RGB"
                     elif operation.startswith('r'):
                         current_filter = self._filters[operation[1:]]
                         print("shrink " + str(current_filter) + "; ", end='')
@@ -105,7 +113,10 @@ class Ruiner:
                 im.save(outfile, "JPEG")
                 print('')
 
-        self.export_image()
+
+        if band == "YCbCr":
+            self.convert_to_RGB()
+        self.export_image() 
         if self._args.gif:
             self.export_gif()
         if not self._args.keep_temp:
