@@ -6,7 +6,8 @@ import PIL.Image
 from PIL import Image
 
 import argparse
-
+ 
+ 
 
 # first iteration = 100%
 # last iteration = dip_percentage
