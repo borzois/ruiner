@@ -6,8 +6,8 @@ import PIL.Image
 from PIL import Image
 
 import argparse
-
-
+ 
+ 
 # first iteration = 100%
 # last iteration = dip_percentage
 def interpolated_dip(iteration, total_iterations, dip_percentage):
@@ -46,6 +46,12 @@ class Ruiner:
             print("loaded " + self._image_path)
             im = im.convert("RGB")
             im.save("tmp/compressed0.jpg", "JPEG")
+            return im
+
+    def convert_to_RGB(self):
+        with Image.open(self._image_path) as im:
+            im = im.convert("RGB")
+            print("bad color mode, converting to RGB!")
             return im
 
     def export_image(self):
@@ -105,7 +111,9 @@ class Ruiner:
                 im.save(outfile, "JPEG")
                 print('')
 
-        self.export_image()
+        if im.mode != "RGBA":
+            self.convert_to_RGB()
+        self.export_image() 
         if self._args.gif:
             self.export_gif()
         if not self._args.keep_temp:
@@ -134,3 +142,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
